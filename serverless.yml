@@ -1,0 +1,32 @@
+service: serverless-http-api
+frameworkVersion: "3"
+
+package:
+  patterns:
+    - "!node_modules/**"
+
+plugins:
+  - serverless-domain-manager
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  memorySize: 128
+
+custom:
+  customDomain:
+    basePath: ""
+    domainName: "test-${opt:stage, 'dev'}.aissaymaster.com"
+    endpointType: "regional"
+    apiType: "http"
+    autoDomain: true
+
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /
+          method: get
